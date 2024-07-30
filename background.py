@@ -4,7 +4,7 @@ import streamlit as st
 page_bg_img = '''
 <style>
 body {
-background-image: url("data/your_image.jpg");
+background-image: url("data/header-bg-home.jpg");
 background-size: cover;
 }
 </style>
