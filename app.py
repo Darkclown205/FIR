@@ -3,13 +3,23 @@ import json
 import os
 from datetime import datetime
 
+# Set the background image
+page_bg_img = '''
+<style>
+body {
+background-image: url("data/your_image.jpg");
+background-size: cover;
+}
+</style>
+'''
+
+st.markdown(page_bg_img, unsafe_allow_html=True)
+
 # Define file paths
 DATA_FILE = 'data/firs.json'
 USERS_FILE = 'data/users.json'
 
 # Load FIRs data
-
-
 def load_data():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r') as file:
@@ -17,15 +27,11 @@ def load_data():
     return []
 
 # Save FIRs data
-
-
 def save_data(firs):
     with open(DATA_FILE, 'w') as file:
         json.dump(firs, file, indent=4)
 
 # Load users data
-
-
 def load_users():
     if os.path.exists(USERS_FILE):
         with open(USERS_FILE, 'r') as file:
@@ -33,24 +39,17 @@ def load_users():
     return []
 
 # Save users data
-
-
 def save_users(users):
     with open(USERS_FILE, 'w') as file:
         json.dump(users, file, indent=4)
 
 # User authentication
-
-
 def authenticate(username, password):
     users = load_users()
-    user = next((user for user in users if user['username']
-                == username and user['password'] == password), None)
+    user = next((user for user in users if user['username'] == username and user['password'] == password), None)
     return user
 
 # User registration
-
-
 def register(username, password, role):
     users = load_users()
     if any(user['username'] == username for user in users):
@@ -58,7 +57,6 @@ def register(username, password, role):
     users.append({"username": username, "password": password, "role": role})
     save_users(users)
     return True
-
 
 def main():
     if 'logged_in' not in st.session_state:
@@ -119,8 +117,7 @@ def main():
                 location = st.text_input("Location")
                 action_requested = st.text_input("Action Requested")
                 evidence = st.file_uploader("Upload Evidence", type=['jpg', 'png', 'pdf'])
-                declaration = st.checkbox(
-                    "I declare that the information provided is true and accurate.")
+                declaration = st.checkbox("I declare that the information provided is true and accurate.")
                 submit_button = st.form_submit_button(label='Add FIR')
 
                 if submit_button:
@@ -140,8 +137,7 @@ def main():
                             "status": "Open"
                         }
                         if evidence:
-                            evidence_path = os.path.join(
-                                'data', f'evidence_{fir_id}_{evidence.name}')
+                            evidence_path = os.path.join('data', f'evidence_{fir_id}_{evidence.name}')
                             with open(evidence_path, 'wb') as file:
                                 file.write(evidence.read())
                             fir_data["evidence"] = evidence_path
@@ -153,13 +149,11 @@ def main():
 
         elif st.session_state['role'] == 'cops':
             search = st.text_input("Search FIRs by title, location, or status")
-            filtered_firs = [fir for fir in firs if search.lower() in fir['title'].lower(
-            ) or search.lower() in fir['location'].lower() or search.lower() in fir['status'].lower()]
+            filtered_firs = [fir for fir in firs if search.lower() in fir['title'].lower() or search.lower() in fir['location'].lower() or search.lower() in fir['status'].lower()]
 
             st.write("### All FIRs")
             for fir in filtered_firs:
-                st.write(
-                    f"**{fir['title']}**: {fir['description']} (Location: {fir['location']}, Action Requested: {fir['action_requested']}, Status: {fir['status']}, Time: {fir['timestamp']})")
+                st.write(f"**{fir['title']}**: {fir['description']} (Location: {fir['location']}, Action Requested: {fir['action_requested']}, Status: {fir['status']}, Time: {fir['timestamp']})")
                 st.write(f"Complainer: {fir['complainer_name']}")
 
                 if "evidence" in fir:
@@ -178,12 +172,9 @@ def main():
                         fir['closed_by'] = st.session_state['username']
                         fir['closed_on'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         # Notify complainer (you might want to send an email in a real app)
-                        st.success(
-                            f"Case {fir['id']} closed by {fir['closed_by']} on {fir['closed_on']}")
-                        st.info(
-                            f"Notification sent to complainer: {fir['complainer_name']} at {fir['complainer_email']}")
+                        st.success(f"Case {fir['id']} closed by {fir['closed_by']} on {fir['closed_on']}")
+                        st.info(f"Notification sent to complainer: {fir['complainer_name']} at {fir['complainer_email']}")
                         save_data(firs)
-
 
 if __name__ == "__main__":
     main()
