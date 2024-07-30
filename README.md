@@ -24,7 +24,7 @@ A video demonstration of the project can be viewed at: [Your Video URL Here]
     ```
 2. **Navigate to the project directory**:
     ```
-    cd [cd cd FIR]
+    cd [FIR]
     ```
 3. **Install the required packages**:
     ```
