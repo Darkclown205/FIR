@@ -20,7 +20,7 @@ A video demonstration of the project can be viewed at: [Your Video URL Here]
 ## Installation & Usage
 1. **Clone the repository**: 
     ```
-    git clone []
+    git clone [https://github.com/Darkclown205/FIR]
     ```
 2. **Navigate to the project directory**:
     ```
